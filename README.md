@@ -25,7 +25,10 @@ Once installed, use the modules in playbook or role:
           ENV_VAR: "value"
           ENV_VAR2: "value2"
 ```
-Ansible Service Broker will read the encoded credentials as part of running a task (e.g. provision, bind)
+
+Modules
+-------
+- [asb_encode_binding](library/asb_encode_binding.py) - Takes a dictionary of fields and makes them available to Ansible Service Broker to read and create a binding when running the action (provision, bind, etc)
 
 License
 -------

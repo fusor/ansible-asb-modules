@@ -34,6 +34,13 @@ EXAMPLES = '''
       POSTGRESQL_PASSWORD: "{{ postgresql_password }}"
       POSTGRESQL_DATABASE: "{{ postgresql_database }}"
 '''
+RETURN = '''
+encoded_fields:
+    description: string containing encoded fields
+    returned: success
+    type: string
+    sample: eyJURVNUX1ZBUl8xIjogInRlc3QgdmFsdWUgMSIsICJUZXN0VmFsdWUyIjogMn0=
+'''
 
 import json
 import base64
