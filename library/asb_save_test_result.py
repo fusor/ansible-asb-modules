@@ -19,13 +19,12 @@ author:
 options:
   fail:
     description:
-      - 'Will signify whether the test result has passed or faild.'
+      - 'Will signify whether the test result has passed or failed.'
     default: false
     type: bool
   msg:
     description:
-      - 'Determines the message th should be displayed for the failure or
-      success'
+      - 'The message that will be printed with the failure or success'
     type: string
 '''
 
