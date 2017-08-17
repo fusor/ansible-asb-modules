@@ -27,13 +27,13 @@
         msg: Test result file at {{ result_file_path }} could not be found
       when: not result_file_status.stat.exists
 
-    - name: read credentials file
+    - name: read test results file
       shell: cat {{ result_file_path }}
       register: test_result
       when: result_file_status.stat.exists
       changed_when: False
 
-    - name: test result file should contain encoded value
+    - name: test result file should contain 1 test result
       debug:
         msg: "{{ test_result.stdout }}"
     
@@ -54,12 +54,12 @@
         msg: Test result file at {{ result_file_path }} could not be found
       when: not result_file_status.stat.exists
 
-    - name: read credentials file
+    - name: read test results file
       shell: cat {{ result_file_path }}
       register: test_result
       when: result_file_status.stat.exists
       changed_when: False
 
-    - name: test result file should contain encoded value
+    - name: test result file should contain 2 test results 
       debug:
         msg: "{{ test_result.stdout }}"
