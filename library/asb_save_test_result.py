@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from ansible.module_utils.basic import AnsibleModule
+
 ANSIBLE_METADATA = {'metadata_version': '1.0',
                     'status': ['preview'],
                     'supported_by': 'community'}
@@ -41,14 +43,11 @@ EXAMPLES = '''
 RETURN = '''
 '''
 
-import json
-import base64
-from ansible.module_utils.basic import AnsibleModule
-
 TEST_RESULT_PATH = "/var/tmp/test-result"
 
-def main():
 
+def main():
+    """Ansible module that will Append test result to test result file."""
     argument_spec = dict(
         fail=dict(default=False, type='bool'),
         msg=dict(default=None, type='str')
@@ -56,7 +55,7 @@ def main():
 
     ansible_module = AnsibleModule(argument_spec=argument_spec)
     try:
-        with open(TEST_RESULT_PATH, "w") as test_result_file:
+        with open(TEST_RESULT_PATH, "a") as test_result_file:
             # If failure is true then print the 1 code the test file.
             if ansible_module.params['fail']:
                 test_result_file.write("1\n")
@@ -65,9 +64,9 @@ def main():
                 test_result_file.write("0\n")
 
             if ansible_module.params['msg'] is not None:
-                test_result_file.write(ansible_module.params['msg'])
+                test_result_file.write("%s\n" % ansible_module.params['msg'])
     except Exception as error:
-        ansible_module.fail_json(msg="Error attempting to write binding: " + str(error))
+        ansible_module.fail_json(msg="Error attempting to write test result: " + str(error))
 
     ansible_module.exit_json(changed=True)
 
