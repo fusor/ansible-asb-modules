@@ -10,14 +10,14 @@ Installation and use
 Use the Galaxy client to install the role:
 
 ```
-$ ansible-galaxy install ansibleplaybookbundle.asb-modules
+$ ansible-galaxy install git+https://github.com/fusor/ansible-asb-modules.git
 ```
 
 Once installed, use the modules in playbook or role:
 ```yaml
 - name: Encodes fields for Ansible Service Broker
   roles:
-    - ansibleplaybookbundle.asb-modules
+    - ansible-asb-modules
   tasks:
     - name: encode bind credentials
       asb_encode_binding:
