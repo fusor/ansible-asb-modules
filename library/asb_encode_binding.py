@@ -54,8 +54,8 @@ except Exception as error:
     ansible_module.fail_json(msg="Error attempting to load kubernetes client: {}".format(error))
 
 ENCODED_BINDING_PATH = "/var/tmp/bind-creds"
+ENV_NAME = "POD_NAME"
 ENV_NAMESPACE = "POD_NAMESPACE"
-SECRET_NAME = "asb-encode-binding"
 
 
 def main():
@@ -73,15 +73,16 @@ def main():
         ansible_module.fail_json(msg="Error attempting to encode binding: {}".format(error))
 
     try:
+        name = os.environ[ENV_NAME]
         namespace = os.environ[ENV_NAMESPACE]
     except Exception as error:
-        ansible_module.fail_json(msg="Error attempting to get namespace from environment: {}".format(error))
+        ansible_module.fail_json(msg="Error attempting to get name/namespace from environment: {}".format(error))
 
     try:
 	api.create_namespaced_secret(
 	    namespace=namespace,
 	    body=client.V1Secret(
-		metadata=client.V1ObjectMeta(name=SECRET_NAME),
+		metadata=client.V1ObjectMeta(name=name),
 		data={"fields": encoded_fields}
 	    )
 	)
