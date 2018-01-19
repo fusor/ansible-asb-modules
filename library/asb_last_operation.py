@@ -22,6 +22,16 @@ options:
       - 'string describing the last operation'
     required: true
     default: ""
+env:
+        - Set via the downward API on the APB Pod
+        - name: ENV_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ENV_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace      
 '''
 
 EXAMPLES = '''
@@ -56,17 +66,19 @@ def main():
 
     ansible_module = AnsibleModule(argument_spec=argument_spec)
 
-    try:
-        lastOp = ansible_module.params['description']
-    except Exception as error:
-        ansible_module.fail_json(msg="Error attempting to get description parameter for last operation update: {}".format(error))    
+    if 'description' not in ansible_module.params:
+        error, last operation requires a description
     
-    try:
-        name = os.environ[ENV_NAME]
-        namespace = os.environ[ENV_NAMESPACE]
-    except Exception as error:
-        ansible_module.fail_json(msg="Error attempting to get name/namespace from environment: {}".format(error))
+    if ENV_NAME not in os.environ:
+        error, expected a POD_NAME in the environment
 
+    if ENV_NAMESPACE not in os.environ:
+        error, expected a POD_NAMESPACE in the environment
+
+    lastOp = ansible_module.params['description']
+    name = os.environ[ENV_NAME]
+    namespace = os.environ[ENV_NAMESPACE]
+    
     try:    
         pod = api.read_namespaced_pod(
         name=name,
@@ -76,7 +88,7 @@ def main():
         pod.metadata.annotations[LAST_OPERATION_ANNOTATION] = lastOp
         api.replace_namespaced_pod(name=name,namespace=namespace,body=pod,pretty='true')
     except Exception as error:
-        ansible_module.fail_json(msg="Error attempting to updat pod with last operation annotation: {}".format(error))
+        ansible_module.fail_json(msg="Error attempting to update pod with last operation annotation: {}".format(error))
 
     ansible_module.exit_json(changed=True, last_operation=lastOp)
 
