@@ -65,7 +65,6 @@ def main():
     argument_spec = dict(
         description=dict(required=True, type='str')
     )
-    print "module started 1"
 
     ansible_module = AnsibleModule(argument_spec=argument_spec)
 
