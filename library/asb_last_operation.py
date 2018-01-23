@@ -62,18 +62,21 @@ ENV_NAMESPACE = "POD_NAMESPACE"
 
 def main():
 
-    argument_spec = string 
+    argument_spec = dict(
+        description=dict(required=True, type='str')
+    )
+    print "module started 1"
 
     ansible_module = AnsibleModule(argument_spec=argument_spec)
 
     if 'description' not in ansible_module.params:
-        error, last operation requires a description
+        error, 'last operation requires a description'
     
     if ENV_NAME not in os.environ:
-        error, expected a POD_NAME in the environment
+        error, 'expected a POD_NAME in the environment'
 
     if ENV_NAMESPACE not in os.environ:
-        error, expected a POD_NAMESPACE in the environment
+        error, 'expected a POD_NAMESPACE in the environment'
 
     lastOp = ansible_module.params['description']
     name = os.environ[ENV_NAME]
