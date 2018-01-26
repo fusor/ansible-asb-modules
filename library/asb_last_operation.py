@@ -24,11 +24,11 @@ options:
     default: ""
 env:
         - Set via the downward API on the APB Pod
-        - name: ENV_NAME
+        - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: ENV_NAMESPACE
+        - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace      
@@ -68,18 +68,13 @@ def main():
 
     ansible_module = AnsibleModule(argument_spec=argument_spec)
 
-    if 'description' not in ansible_module.params:
-        error, 'last operation requires a description'
-    
-    if ENV_NAME not in os.environ:
-        error, 'expected a POD_NAME in the environment'
-
-    if ENV_NAMESPACE not in os.environ:
-        error, 'expected a POD_NAMESPACE in the environment'
-
     lastOp = ansible_module.params['description']
-    name = os.environ[ENV_NAME]
-    namespace = os.environ[ENV_NAMESPACE]
+
+    try: 
+        name = os.environ[ENV_NAME]
+        namespace = os.environ[ENV_NAMESPACE]
+    except KeyError as error:
+        ansible_module.fail_json(msg="Error attempting to update pod with last operation annotation. Missing key from environment: {}".format(error))
     
     try:    
         pod = api.read_namespaced_pod(

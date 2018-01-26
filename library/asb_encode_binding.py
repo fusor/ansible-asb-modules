@@ -24,11 +24,11 @@ options:
     default: {}
  env:
         - Set via the downward API on the APB Pod
-        - name: ENV_NAME
+        - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: ENV_NAMESPACE
+        - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace    
