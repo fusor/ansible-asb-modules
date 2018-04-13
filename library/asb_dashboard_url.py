@@ -9,7 +9,7 @@ DOCUMENTATION = '''
 ---
 module: asb_dashboard_url
 short_description: Adds a annotation to the pod running the apb with the dashboard URL
-description:
+dashboard_url:
      - Takes a string containing the dashboard URL. This URL should point to the provisioned application.
        This URL is then added an an annotation to the pod executing the apb and read by the broker.
 notes: []
@@ -17,8 +17,8 @@ requirements: []
 author:
     - "Red Hat, Inc."
 options:
-  description:
-    iption:
+  dashboard_url:
+    dashboard_url:
       - 'string describing the last operation'
     required: true
     default: ""
@@ -26,8 +26,8 @@ options:
 
 EXAMPLES = '''
 - name: update last operation
-  asb_last_operation:
-    description:
+  asb_dashboard_url:
+    dashboard_url:
       "10%: creating service route"
 '''
 RETURN = '''
@@ -53,7 +53,7 @@ ENV_NAMESPACE = "POD_NAMESPACE"
 def main():
 
     argument_spec = dict(
-        description=dict(required=True, type='str')
+        dashboard_url=dict(required=True, type='str')
     )
 
     ansible_module = AnsibleModule(argument_spec=argument_spec)
