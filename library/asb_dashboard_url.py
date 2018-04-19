@@ -11,7 +11,7 @@ module: asb_dashboard_url
 short_description: Adds a annotation to the pod running the apb with the dashboard URL
 dashboard_url:
      - Takes a string containing the dashboard URL. This URL should point to the provisioned application.
-       This URL is then added an an annotation to the pod executing the apb and read by the broker.
+       This URL is then added as an annotation to the pod executing the apb and read by the broker.
 notes: []
 requirements: []
 author:
@@ -19,16 +19,25 @@ author:
 options:
   dashboard_url:
     dashboard_url:
-      - 'string describing the last operation'
+      - 'string containing URL to provisioned application'
     required: true
     default: ""
+env:
+        - Set via the downward API on the APB Pod
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
 '''
 
 EXAMPLES = '''
 - name: update last operation
   asb_dashboard_url:
-    dashboard_url:
-      "10%: creating service route"
+    dashboard_url: automationbroker.io
 '''
 RETURN = '''
 
